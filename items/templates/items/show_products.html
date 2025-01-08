@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}E_Commerce{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/show_products.css' %}">
+{% endblock %}
+
+{% block content %}
+{% include "items/includes/header.html" %}
+<br>
+<br>
+    {% include "items/includes/product_card.html" %}
+{% endblock %}

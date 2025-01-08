@@ -1,0 +1,19 @@
+{% load custom_filters %}
+
+<div class="product-container">
+{% for i in products %}
+    <div class="product-box">
+        <a href="{% url 'product_detail' i.product_slug %}" class="product-link">
+            <h2><b>{{ i.product_name }}</b></h2>
+            <p>Price: {{ i.product_price }}</p>
+        </a>
+        {% if cart%}
+        <div class="quantity-control">
+            <a href="{% url 'decrease_cart' i.product_slug %}"><button class="decrease-btn">-</button></a>
+            <span class="quantity-display">{{ cart|get_item:i.id|default:0 }}</span>
+            <a href="{% url 'increase_cart' i.product_slug%}"><button class="increase-btn">+</button></a>
+        </div>
+        {%endif%}
+    </div>
+{% endfor %}
+</div>

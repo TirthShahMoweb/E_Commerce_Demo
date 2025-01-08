@@ -1,0 +1,47 @@
+{%load static%}
+<div class="header-container" style="display: flex;margin-right:20px; justify-content:end; align-items: center;">
+    <div class="add-product-btn-container">
+    <form method="GET" action="{% url 'search_items' %}" class="search-form">
+        <input type="text" name="query" value='{%if query%}{{ query }} {%endif%}'  placeholder="Search Products..." class="search-input">
+        <button type="submit" class="search-btn">Search</button>
+    </form>
+
+    <form method="GET" action="{% url 'filter_sort' %}" style="display: flex; gap: 5px;">
+            <input type="hidden" name="query" value="{{ query }}">
+
+        <select name="filter" class="filter-dropdown" 
+                style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; background-color: white; cursor: pointer;">
+            <option value="" hidden disable>Filter by</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+            <option value="rating_high">Rating: High to Low</option>
+            <option value="rating_low">Rating: Low to High</option>
+        </select>
+
+          <div style="position: relative;">
+                <select name="companies" class="filter-dropdown" 
+                style="padding: 8px; border: 1px solid #ccc; border-radius: 5px; background-color: white; cursor: pointer;">
+                    <option value="" hidden disable>Filter by</option>   
+                    {% for i in company %}
+                        <option value="{{ i.product_company_name }}" 
+                            style="padding: 5px;">{{ i.product_company_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <button type="submit" class="filter-btn" 
+                style="background-color: #007BFF; color: white; border: none; border-radius: 5px; padding: 8px 12px; cursor: pointer;">
+                <strong>Apply</strong>
+        </button>
+    </form>
+    <a href="{% url 'show_cart'  %}" class="add-product-btn" style="background-color:#FFC300;">Your Cart</a>
+    {%if user.user_role == "Administrator" %}
+    <a href="{% url 'add_product' %}" class="add-product-btn">Add Product</a>{%endif%}
+     </div>
+     <div class="profile-photo-container" style="position: relative; margin-left: 20px;">
+        <a href="{% if logged_user %}{% url 'user_profile' %}{% else %}{% url 'user_login' %}{% endif %}">
+    <img src="{% if user.user_image %}{{ user.user_image.url }}{% else %}{% static 'items/images/profile_photo.png' %}{% endif %}"  alt="Profile Photo" 
+         style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover; border: 2px solid #ccc;">
+        </a>
+    </div>
+</div>

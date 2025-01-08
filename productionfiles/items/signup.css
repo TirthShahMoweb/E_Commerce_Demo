@@ -1,0 +1,232 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #4facfe, #00f2fe);
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Form Container */
+.form-container {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    font-weight: bold;
+}
+
+/* Input Group */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+    /* Slight spacing below the label */
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+    width: 100%;
+    padding: 10px;
+    /* Slightly reduced padding */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-bottom: 10px;
+    /* Adds space after each input */
+    transition: border-color 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
+    border-color: #4facfe;
+    outline: none;
+}
+
+/* Radio and Checkbox Styling */
+.input-group input[type="radio"],
+.input-group input[type="checkbox"] {
+    width: auto;
+    /* Ensure these fields don't stretch */
+    margin-right: 5px;
+    /* Add spacing between the radio/checkbox and label */
+}
+
+.radio-group,
+.checkbox-group {
+    display: flex;
+    /* Align horizontally */
+    gap: 10px;
+    /* Reduce spacing between radio buttons */
+    align-items: center;
+    /* Vertically align with labels */
+    margin-bottom: 10px;
+    /* Adds space after the entire radio/checkbox group */
+}
+
+/* Submit Button */
+.form-container button {
+    background: #4facfe;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s ease;
+}
+
+.form-container button:hover {
+    background: #00c6fb;
+}
+
+/* Error and Success Messages */
+.alert {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #f5c6cb;
+    text-align: left;
+}
+
+.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.message {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Footer Text */
+.signup-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.signup-text a {
+    color: #4facfe;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.signup-text a:hover {
+    color: #00c6fb;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .form-container {
+        padding: 20px;
+    }
+
+    .form-container h2 {
+        font-size: 20px;
+    }
+
+    .input-group input {
+        font-size: 14px;
+    }
+
+    .form-container button {
+        font-size: 14px;
+    }
+}
+
+/* Ensure relative positioning for container */
+.form-container {
+    position: relative;
+    /* Parent element for absolute positioning */
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+/* Home icon inside container */
+.home-icon-link {
+    position: absolute;
+    top: 10px;
+    /* Space from the top of the box */
+    left: 10px;
+    /* Space from the left of the box */
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #4CAF50;
+    /* Green background */
+    color: white;
+    border-radius: 50%;
+    /* Circular shape */
+    font-size: 18px;
+    /* Smaller font size for the home symbol */
+    text-decoration: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Hover effect for the home button */
+.home-icon-link:hover {
+    background-color: #45a049;
+    /* Darker green */
+    transform: scale(1.1);
+    /* Slightly enlarge */
+}
+
+/* Style tweaks for content inside form container */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.signup-text {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.signup-text a {
+    color: #4FACFE;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.signup-text a:hover {
+    color: #00C6FB;
+}

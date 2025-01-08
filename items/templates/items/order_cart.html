@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+{% block title %}E-Commerce - Order Confirmation{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/order_cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="order-container">
+    <div class="order-header">
+        <h1>{{ message }}</h1>
+        <p>Thank you for your purchase! Your order will be delivered within 5 days.</p>
+    </div>
+
+    <div class="order-summary">
+        <h2 style="font-size: 2rem; margin-bottom: 20px; color: #007bff;">Order Summary</h2>
+        {% for item in product %}
+        <div class="order-item">
+            <div class="item-details">
+                <h3>{{ item.product_name }}</h3>
+                <p>
+                    {% with quantity=user.user_cart|get_item:item.id %}
+                    Qty: {{ quantity }}
+                    {% endwith %}
+                </p>
+                <p>Price per Item: ₹{{ item.product_price }}</p>
+            </div>
+            <div class="item-total" style="font-size: 1.5rem; color: #007bff; font-weight: bold;">
+                {% with quantity=user.user_cart|get_item:item.id %}
+                <h3>Subtotal: ₹{{ item.product_price|multiply:quantity }}</h3>
+                {% endwith %}
+            </div>
+        </div>
+        {% endfor %}
+        <div class="total-price">
+            <h2 style="font-size: 2rem; text-align: right; color: #28a745; font-weight: bold;">Total Bill: ₹{{ total_price }}</h2>
+        </div>
+    </div>
+
+    <div class="billing-info">
+        <h2 style="font-size: 1.8rem; color: #007bff;">Billing Information</h2>
+        <p><strong>Name:</strong> {{ user.user_name }}</p>
+
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            {% if user.user_address %}
+            <p><strong>Address:</strong>{{ user.user_address }}</p>
+            <a href="#" class="change-link" style="color: blue; text-decoration: underline;" onclick="toggleChangeSection()">Change</a>
+            {% else %}
+            <form method="post" action="{% url 'add_address' %}">
+                {% csrf_token %}
+                Address: <input type="text" name="user_address" placeholder="Add your address" style="width: 70%; padding: 8px; margin-right: 10px;" required>
+                <button type="submit" style="padding: 8px 12px; background-color: blue; color: white; border: none; cursor: pointer;">Save</button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- Hidden Section for Changing Address -->
+        <div id="change-address-section" style="display: none; margin-top: 20px;">
+            <form method="post" action="{% url 'show_product' %}">
+                {% csrf_token %}
+                <p>Select an address:</p>
+                {% for address in user.address_list %}
+                <div>
+                    <input type="radio" id="address_{{ forloop.counter }}" name="selected_address" value="{{ address.id }}" 
+                    {% if address.id == user.selected_address.id %}checked{% endif %}>
+                    <label for="address_{{ forloop.counter }}">{{ address.full_address }}</label>
+                </div>
+                {% endfor %}
+                <button type="submit" style="padding: 8px 12px; background-color: green; color: white; border: none; cursor: pointer;">Update Address</button>
+            </form>
+            <!-- Button to trigger adding a new address -->
+            <a href="#" style="color: blue; text-decoration: underline; margin-top: 10px; display: block;" onclick="toggleAddSection()">Add New Address</a>
+        </div>
+
+        <!-- Hidden Section for Adding New Address -->
+        <div id="add-address-section" style="display: none; margin-top: 20px;">
+            <form method="post" action="{% url 'add_address' %}">
+                {% csrf_token %}
+                Address: <input type="text" name="user_address" placeholder="Add your address" style="width: 70%; padding: 8px; margin-right: 10px;" required>
+                <button type="submit" style="padding: 8px 12px; background-color: blue; color: white; border: none; cursor: pointer;">Save</button>
+            </form>
+        </div>
+
+        <p><strong>Contact:</strong> +91 {{ user.user_mobile }}</p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2024 Your Company. All rights reserved.</p>
+    </div>
+    <a href="{% url 'show_product' %}" class="btn btn-secondary btn-lg" style="background-color: grey; border-color: grey; color: white; text-decoration: none;">Back to Products</a>
+</div>
+{% endblock %}
+
+<script>
+// Toggle the visibility of the change address section
+function toggleChangeSection() {
+    const changeSection = document.getElementById('change-address-section');
+    changeSection.style.display = (changeSection.style.display === 'none' || changeSection.style.display === '') ? 'block' : 'none';
+    // Hide the add address section if it's showing
+    document.getElementById('add-address-section').style.display = 'none';
+}
+
+// Toggle the visibility of the add address section
+function toggleAddSection() {
+    const addSection = document.getElementById('add-address-section');
+    addSection.style.display = (addSection.style.display === 'none' || addSection.style.display === '') ? 'block' : 'none';
+}
+</script>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}E_Commerce{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/signup.css' %}">
+{% endblock %}
+{% block content %}
+
+<div class="form-container">
+    <!-- Home icon positioned inside the box, top-left corner -->
+    <a href="{%url 'show_product'%}" class="home-icon-link">
+        <span class="home-icon">&#127968;</span>
+    </a>
+
+    <h2>Add Profile</h2>
+
+    <form method="POST"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="input-group">
+            {{ user_form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+    </form>
+
+    <p class="signup-text">
+        Already have an account? 
+        <a href="{% url 'user_login' %}">Log in</a>
+    </p>
+</div>
+
+{% endblock %}

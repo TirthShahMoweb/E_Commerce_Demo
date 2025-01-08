@@ -1,0 +1,242 @@
+[
+    {
+        "model": "items.product",
+        "pk": 15,
+        "fields": {
+            "product_name": "Wireless Bluetooth Headphones",
+            "product_price": 2999,
+            "product_quantity": 50,
+            "product_rating": 4.5,
+            "product_company_name": "AudioTech",
+            "product_info": "High-quality wireless headphones with noise cancellation and 20-hour battery life."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 16,
+        "fields": {
+            "product_name": "Smartphone 5G Pro",
+            "product_price": 59999,
+            "product_quantity": 30,
+            "product_rating": 4.8,
+            "product_company_name": "MobileCorp",
+            "product_info": "Latest 5G-enabled smartphone with 108MP camera and 5000mAh battery."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 17,
+        "fields": {
+            "product_name": "Gaming Laptop X300",
+            "product_price": 79999,
+            "product_quantity": 20,
+            "product_rating": 4.7,
+            "product_company_name": "GameTech",
+            "product_info": "Powerful gaming laptop with RTX 3080 graphics and 144Hz display."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 18,
+        "fields": {
+            "product_name": "4K Ultra HD Smart TV",
+            "product_price": 42999,
+            "product_quantity": 40,
+            "product_rating": 4.6,
+            "product_company_name": "VisionTech",
+            "product_info": "Experience cinematic visuals with a 55-inch 4K Ultra HD Smart TV."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 19,
+        "fields": {
+            "product_name": "Fitness Band Tracker",
+            "product_price": 1999,
+            "product_quantity": 100,
+            "product_rating": 4.4,
+            "product_company_name": "FitLife",
+            "product_info": "Track your fitness goals with a waterproof band and heart rate monitor."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 20,
+        "fields": {
+            "product_name": "Noise Cancelling Earbuds",
+            "product_price": 4999,
+            "product_quantity": 60,
+            "product_rating": 4.3,
+            "product_company_name": "SoundWave",
+            "product_info": "Compact earbuds with superior sound quality and active noise cancellation."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 21,
+        "fields": {
+            "product_name": "Smart Watch Pro",
+            "product_price": 10999,
+            "product_quantity": 80,
+            "product_rating": 4.5,
+            "product_company_name": "GadgetHub",
+            "product_info": "A smartwatch with fitness tracking, GPS, and a sleek design."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 22,
+        "fields": {
+            "product_name": "Portable Power Bank 20000mAh",
+            "product_price": 1499,
+            "product_quantity": 150,
+            "product_rating": 4.4,
+            "product_company_name": "ChargeFast",
+            "product_info": "Fast-charging portable power bank with dual USB output."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 23,
+        "fields": {
+            "product_name": "DSLR Camera Pro 18-55mm",
+            "product_price": 45999,
+            "product_quantity": 25,
+            "product_rating": 4.7,
+            "product_company_name": "PhotoClick",
+            "product_info": "Capture stunning photos and videos with this professional DSLR camera."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 24,
+        "fields": {
+            "product_name": "Mechanical Gaming Keyboard",
+            "product_price": 2999,
+            "product_quantity": 70,
+            "product_rating": 4.6,
+            "product_company_name": "KeyPro",
+            "product_info": "RGB backlit mechanical keyboard for gaming and productivity."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 25,
+        "fields": {
+            "product_name": "Premium Office Chair",
+            "product_price": 12999,
+            "product_quantity": 45,
+            "product_rating": 4.8,
+            "product_company_name": "ErgoSeating",
+            "product_info": "Ergonomic office chair with lumbar support and adjustable settings."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 26,
+        "fields": {
+            "product_name": "Wireless Charging Pad",
+            "product_price": 999,
+            "product_quantity": 120,
+            "product_rating": 4.4,
+            "product_company_name": "ChargeMax",
+            "product_info": "Fast wireless charging pad compatible with most smartphones."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 27,
+        "fields": {
+            "product_name": "Noise Cancelling Microphone",
+            "product_price": 3499,
+            "product_quantity": 65,
+            "product_rating": 4.5,
+            "product_company_name": "AudioPro",
+            "product_info": "High-performance microphone with noise cancellation for clear audio."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 28,
+        "fields": {
+            "product_name": "Electric Kettle 1.7L",
+            "product_price": 1599,
+            "product_quantity": 90,
+            "product_rating": 4.6,
+            "product_company_name": "KitchenEssentials",
+            "product_info": "Stylish and fast-boiling electric kettle with 1.7L capacity."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 29,
+        "fields": {
+            "product_name": "Cordless Vacuum Cleaner",
+            "product_price": 7999,
+            "product_quantity": 35,
+            "product_rating": 4.7,
+            "product_company_name": "CleanMate",
+            "product_info": "Lightweight and powerful cordless vacuum cleaner for home use."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 30,
+        "fields": {
+            "product_name": "Adjustable Dumbbells Set",
+            "product_price": 5499,
+            "product_quantity": 60,
+            "product_rating": 4.4,
+            "product_company_name": "FitGear",
+            "product_info": "Space-saving adjustable dumbbells set for home workouts."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 31,
+        "fields": {
+            "product_name": "Tablet Pro 11-inch",
+            "product_price": 39999,
+            "product_quantity": 25,
+            "product_rating": 4.6,
+            "product_company_name": "TechTab",
+            "product_info": "11-inch high-performance tablet for work and entertainment."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 32,
+        "fields": {
+            "product_name": "Smart Home Security Camera",
+            "product_price": 2499,
+            "product_quantity": 80,
+            "product_rating": 4.5,
+            "product_company_name": "SafeVision",
+            "product_info": "Smart home security camera with motion detection and night vision."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 33,
+        "fields": {
+            "product_name": "Portable Air Purifier",
+            "product_price": 4999,
+            "product_quantity": 50,
+            "product_rating": 4.6,
+            "product_company_name": "AirTech",
+            "product_info": "Compact air purifier with HEPA filter for clean air on the go."
+        }
+    },
+    {
+        "model": "items.product",
+        "pk": 34,
+        "fields": {
+            "product_name": "Electric Hair Trimmer",
+            "product_price": 1799,
+            "product_quantity": 110,
+            "product_rating": 4.4,
+            "product_company_name": "StyleCut",
+            "product_info": "Rechargeable electric hair trimmer with multiple attachments."
+        }
+    }
+]

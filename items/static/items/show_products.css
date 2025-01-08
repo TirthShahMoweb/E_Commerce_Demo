@@ -1,0 +1,150 @@
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+}
+
+.product-box {
+    border: 1px solid #ccc;
+    padding: 15px;
+    width: calc(33.33% - 20px);
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    text-align: center;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    /* Shadow effect */
+    border-radius: 10px;
+    /* Rounded border */
+    transition: transform 0.2s, box-shadow 0.2s;
+    /* Smooth hover effect */
+}
+
+.product-box:hover {
+    transform: translateY(-5px);
+    /* Slight lift on hover */
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+    /* Enhanced shadow on hover */
+}
+
+/* Styling for links to remove underline and match the box style */
+.product-link {
+    text-decoration: none;
+    /* Remove underline by default */
+    color: black;
+    /* Set color to black */
+}
+
+.product-link:hover {
+    text-decoration: underline;
+    /* Add underline only on hover */
+    color: black;
+    /* Ensure the color remains black on hover */
+}
+
+/* Style for the product name */
+.product-box h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+}
+
+.product-box p {
+    font-size: 1.2em;
+    color: #333;
+}
+
+/* CSS for the "Add Product" button */
+.add-product-btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: end;
+    gap: 20px;
+}
+
+.add-product-btn {
+    background-color: #4CAF50;
+    /* Green color for the button */
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.add-product-btn:hover {
+    background-color: #45a049;
+    /* Darker green on hover */
+}
+
+/* Search Form */
+.search-form {
+    display: flex;
+    align-items: center;
+
+}
+
+.search-input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    width: 250px;
+    transition: border-color 0.3s;
+}
+
+.search-input:focus {
+    border-color: #4CAF50;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.search-btn:hover {
+    background-color: #45a049;
+}
+
+/* Quantity Control Buttons and Display */
+.quantity-control {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+
+.decrease-btn,
+.increase-btn {
+    padding: 5px 10px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.decrease-btn:hover,
+.increase-btn:hover {
+    background-color: #45a049;
+}
+
+.quantity-display {
+    font-size: 18px;
+    font-weight: bold;
+    min-width: 30px;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+    background-color: #f9f9f9;
+}

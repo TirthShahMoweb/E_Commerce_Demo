@@ -1,0 +1,125 @@
+/* General Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Profile Container */
+.profile-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* Home Icon - Positioned in the top-left */
+.home-icon-link {
+    position: absolute;
+    top: 1px;
+    left: 1px;
+    background-color: #4CAF50;
+    font-size: 1.6rem;
+    /* Size of the icon */
+    color: #348eaf;
+    /* Icon color */
+    /* color: white; */
+    text-decoration: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: color 0.3s ease, transform 0.3s ease-in-out;
+}
+
+.home-icon-link:hover {
+    background-color: #45a049;
+    /* Dark color on hover */
+    transform: scale(1.2);
+    /* Slight enlargement of the icon on hover */
+}
+
+/* Profile Heading */
+.profile-heading {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #2c3e50;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+/* Profile Card */
+.profile-card {
+    position: relative;
+    padding: 20px;
+}
+
+/* Profile Info */
+.profile-info p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    line-height: 1.5;
+}
+
+/* Profile Image */
+.profile-image {
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+/* Upload Image */
+.upload-profile-img {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* Buttons */
+.profile-actions {
+    margin-top: 20px;
+}
+
+.btn {
+    font-size: 1rem;
+    padding: 10px 20px;
+    margin: 10px 10px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .profile-container {
+        padding: 15px;
+    }
+
+    .btn {
+        padding: 10px 15px;
+    }
+
+    .profile-img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .home-icon-link {
+        font-size: 1.5rem;
+        /* Slightly smaller icon on mobile */
+    }
+}

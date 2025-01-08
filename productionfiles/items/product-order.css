@@ -1,0 +1,123 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7fc;
+    color: #333;
+}
+
+.order-container {
+    max-width: 1000px;
+    margin: 50px auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.order-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.order-header h1 {
+    font-size: 2.5rem;
+    color: #28a745;
+}
+
+.order-header p {
+    font-size: 1.2rem;
+    color: #555;
+}
+
+.order-summary h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #007bff;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.item-details h3 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.item-details p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.item-total h3 {
+    font-size: 1.5rem;
+    color: #007bff;
+    font-weight: bold;
+}
+
+.total-price h2 {
+    font-size: 2rem;
+    text-align: right;
+    color: #28a745;
+    font-weight: bold;
+}
+
+.billing-info {
+    margin-top: 30px;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.billing-info h2 {
+    font-size: 1.8rem;
+    color: #007bff;
+}
+
+.billing-info p {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 1rem;
+    color: #888;
+}
+
+.footer p {
+    font-weight: bold;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    border-radius: 5px;
+}
+
+@media screen and (max-width: 768px) {
+    .order-container {
+        padding: 15px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .total-price h2 {
+        font-size: 1.5rem;
+    }
+}

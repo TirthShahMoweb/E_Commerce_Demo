@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Login{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="login-container">
+    <div class="login-box">
+      <a href="{%url 'show_product'%}" class="home-icon-link">
+        <span class="home-icon">&#127968;</span>
+    </a> 
+        <h2>Login</h2>
+
+        <!-- Display error messages only after form submission -->
+        {% if error %}
+        <div class="alert">
+            <p class="message">{{ error }}</p>
+        </div>
+        {% endif %}
+
+        <form method="GET" action="{% url 'user_login' %}">  
+            {% csrf_token %}
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="login-button">Login</button>
+        </form>
+        <p class="signup-text">
+            Don't have an account? 
+            <a href="{% url 'user_signup' %}">Sign up</a>
+        </p>
+
+        <!-- New Home Button -->
+ 
+ </div>
+</div>
+
+{% endblock %}

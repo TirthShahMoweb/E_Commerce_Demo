@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}E_Commerce{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/user_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-card">
+    <a href="{%url 'show_product'%}" class="home-icon-link">
+        <span class="home-icon">&#127968;</span>
+    </a> 
+
+        <h1 class="profile-heading">User Profile</h1>
+        
+        {% for i in logged_user %}
+        <div class="profile-info">
+            <!-- Profile Image -->
+            <div class="profile-image">
+                <img src="{% if i.user_image %}{{ i.user_image.url }}{%else%}{% static 'items/images/profile_photo.png' %}{%endif%}" alt="Profile Picture" class="profile-img">
+                <!-- Optional: Option to upload a profile picture -->
+            </div>
+
+            <!-- User Details -->
+            <p><strong>Name: </strong>{{ i.user_username }}</p>
+            <p><strong>Username: </strong>{{ i.user_name }}</p>
+            <p><strong>Mobile Number: </strong>+91 {{ i.user_mobile }}</p>
+            <p><strong>Email ID: </strong>{{ i.user_email }}</p>
+            <p><strong>Age: </strong>{{ i.user_age }}</p>
+            
+            {% if i.user_role == "Administrator" %}
+                <p><strong>Role: </strong>{{ i.user_role }}</p>
+            {% endif %}
+        </div>
+
+        <div class="profile-actions">
+            <a href="{% url 'show_cart' %}">
+                <button class="btn" style="background-color: #FFC300;color: #fff;">Your Cart</button></a>
+            <button class="btn" style="background-color: #348eaf; color: #fff;">Edit</button>
+            <a href="{% url 'logout_user' %}">
+                <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Logout</button>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

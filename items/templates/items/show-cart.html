@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block title %}E_Commerce{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/show_products.css' %}">
+<link rel="stylesheet" href="{% static 'items/display_cart.css' %}">
+{% endblock %}
+
+{% block content %}
+<br>
+{% include "items/includes/header.html" %}
+<br>
+<br>
+{%if not products%}
+    <div class="cart-header">Your Cart:No items added to the Cart</div>
+{%else%}
+    <div class="cart-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <span>Your Cart</span>
+        <a href="{% url 'cart_order' %}" class="btn-success btn-lg order-btn" 
+           style="padding: 10px 20px; font-size: 1.2rem; text-transform: uppercase; 
+           border-radius: 5px; text-decoration: none;">Buy Now</a>
+    </div>
+    <div class="cart-container">
+        <div class="cart-summary">
+        </div>
+        {%for i in products%}
+        <div class="cart-item">
+        <div class="item-details">
+            <a href="{% url 'product_detail' i.product_slug %}" class="product-link">
+                <div class="item-name">{{i.product_name}}</div>
+                <div class="item-price">Price: {{i.product_price}}</div>
+        </a>
+            </div>
+            <div class="quantity-control">
+                <a href="{% url 'decrease_cart' i.product_slug %}"><button class="btn">-</button></a>
+                <span class="quantity-display" id="quantity-display" style="font-size:1.5rem; font-weight: bold;text-align: center;width: 50px;display: inline-block;background-color:white;padding: 6px;border: 1px solid #ddd;border-radius: 4px;">{% with quantity=cart|get_item:i.id%} {{quantity}}</span>
+                <a href="{% url 'increase_cart' i.product_slug %}"><button class="btn" {% if i.product_quantity == quantity %} disabled {%endif%}>+</button></a>
+            </div>
+                <div class="item-total">
+                    {% with total_price=i.product_price|multiply:quantity %}
+                    ₹{{ total_price }}
+                    {% endwith %}
+                    {% endwith %}
+                </div>
+            </div>
+        {%endfor%}
+    </div>
+    <div class="subtotal">Subtotal:  ₹{{total_value}}</div>
+   
+
+    {%endif%}
+
+{% endblock %}
