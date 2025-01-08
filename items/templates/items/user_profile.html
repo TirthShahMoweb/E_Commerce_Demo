@@ -39,7 +39,8 @@
         <div class="profile-actions">
             <a href="{% url 'show_cart' %}">
                 <button class="btn" style="background-color: #FFC300;color: #fff;">Your Cart</button></a>
-            <button class="btn" style="background-color: #348eaf; color: #fff;">Edit</button>
+            <a href="{% url 'update_user' i.user_username %}">
+                <button class="btn" style="background-color: #348eaf; color: #fff;">Edit</button></a>
             <a href="{% url 'logout_user' %}">
                 <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Logout</button>
             </a>
