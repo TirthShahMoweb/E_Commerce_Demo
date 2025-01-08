@@ -13,20 +13,20 @@
         <span class="home-icon">&#127968;</span>
     </a>
 
-    <h2>Add Profile</h2>
+    <h2>{% if user_form.instance.pk %}Update{%else%}Add{%endif%} Profile</h2>
 
     <form method="POST"  enctype="multipart/form-data">
         {% csrf_token %}
         <div class="input-group">
             {{ user_form.as_p }}
         </div>
-        <button type="submit" class="btn btn-primary">Add</button>
+        <button type="submit" class="btn btn-primary">{% if user_form.instance.pk %}Update{%else%}Add{%endif%}</button>
     </form>
-
+    {% if not user_form.instance.pk %}
     <p class="signup-text">
         Already have an account? 
         <a href="{% url 'user_login' %}">Log in</a>
-    </p>
+    </p>{%endif%}
 </div>
 
 {% endblock %}

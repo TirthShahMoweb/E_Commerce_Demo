@@ -18,6 +18,7 @@ urlpatterns = [
     path("login/",views.login,name='user_login'),
     path('logout_user/',views.logout_user,name='logout_user'),
     path('signup/',views.signup_update,name='user_signup'),
+    path("user_update/<str:user_username>/",views.signup_update,name="update_user"),
     path('user_profile/',views.user_profile,name='user_profile'),
     
     #Add to Cart, View Cart,  

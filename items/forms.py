@@ -113,3 +113,8 @@ class UserForm(forms.ModelForm):
         required=False,  # Optional to allow users to skip this
         widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),  # Allows only image uploads
     )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance.pk:  # Check if instance exists
+            self.fields.pop('user_password', None)
+            self.fields.pop('user_image',None)

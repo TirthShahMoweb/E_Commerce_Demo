@@ -21,7 +21,6 @@ def show_product(request):
     })
 
 def add_or_update_product(request, product_slug=None):
-    item_names = Product.objects.values_list('product_name', flat=True)
     if product_slug:
         product = get_object_or_404(Product, product_slug=product_slug)
         old_product_name = product.product_name
@@ -39,7 +38,7 @@ def add_or_update_product(request, product_slug=None):
     else:
         form = ProductForm(instance=product)  # Populate form with existing product if updating
 
-    return render(request, 'items/product_update.html', {'form': form, 'item_names': item_names})
+    return render(request, 'items/product_update.html', {'form': form})
 
 def product_details(request, product_slug):
     identified_product = list(Product.objects.filter(product_slug=product_slug).values())
@@ -53,7 +52,9 @@ def product_details(request, product_slug):
             request.session['quantity']=1
     else:
         request.session['product_slug']=product_slug
-    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity']})
+    if 'logged_user' in request.session:
+        user_role=User.objects.filter(user_username=request.session['logged_user']).values_list('user_role').first()
+    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity'],'user_role':user_role[0]})
 
 def product_delete(product_slug):
     del_product = Product.objects.filter(product_slug=product_slug)
@@ -123,13 +124,18 @@ def logout_user(request):
     del request.session['logged_user']
     return redirect("show_product")
 
-def signup_update(request):
+def signup_update(request,user_username=None):
+    if user_username:
+        user=get_object_or_404(User, user_username=user_username)
+    else:
+        user=None
     if request.method == 'POST':
-        user_form = UserForm(request.POST,request.FILES)
+        user_form = UserForm(request.POST,request.FILES, instance=user)
         if user_form.is_valid():
             user = user_form.save()
-            if 'user_Image' in request.FILES:
-                user.user_image = request.FILES['user_Image']
+            
+            # if 'user_Image' in request.FILES:
+            #     user.user_image = request.FILES['user_Image']
             request.session['logged_user'] = user.user_username  # Store user in session
             
             if 'cart'in request.session:
@@ -139,7 +145,7 @@ def signup_update(request):
                 user.save()
             return redirect('show_product')
     else:
-        user_form = UserForm()
+        user_form = UserForm(instance=user)
     return render(request, 'items/signup.html', {'user_form': user_form})
 
 def add_to_cart(request, product_slug):

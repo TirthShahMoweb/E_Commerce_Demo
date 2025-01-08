@@ -39,7 +39,7 @@
             <br>
             <!-- Action Buttons -->
             <div class="d-flex justify-content-center gap-5 mt-4 align-items-center">
-                {%if user.user_role == "Administrator" %}
+                {%if user_role == "Administrator" %}
                 <a href="{% url 'product_update' product.product_slug %}" class="btn btn-primary btn-lg" style="background-color: blue; border-color: blue; color: white; text-decoration: none;">Update</a>
                 <a href="{% url 'product_delete' product.product_slug %}" class="btn btn-danger btn-lg" style="background-color: red; border-color: red; color: white; text-decoration: none;">Delete</a>
                 {% endif %}

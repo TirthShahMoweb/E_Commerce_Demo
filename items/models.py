@@ -33,11 +33,9 @@ class User(models.Model):
     user_role = models.CharField(max_length=25)
     user_order = models.JSONField(null=True)
     user_cart = models.JSONField(null=True)
-    user_slug = models.SlugField()
     user_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     user_address = models.JSONField(null=True)
 
     def save(self,*args,**kargs):
-        self.user_slug = slugify(self.user_username)
         super(User,self).save(*args,**kargs)
     
