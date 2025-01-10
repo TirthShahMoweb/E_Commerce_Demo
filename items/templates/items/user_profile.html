@@ -42,7 +42,9 @@
             <a href="{% url 'update_user' i.user_username %}">
                 <button class="btn" style="background-color: #348eaf; color: #fff;">Edit</button></a>
             <a href="{% url 'logout_user' %}">
-                <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Logout</button>
+                <button class="btn" style="background-color: rgb(128, 128, 128); color: #fff;">Logout</button></a>
+            <a href="{% url 'del_account' i.user_username %}">
+                <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Delete</button>
             </a>
         </div>
         {% endfor %}

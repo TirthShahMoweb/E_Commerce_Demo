@@ -1,8 +1,10 @@
 from django.utils.text import slugify
 from django.db import models
 from django.core.validators import RegexValidator,MinLengthValidator
-from django.db.models.signals import pre_save, post_save
+from django.db.models.signals import pre_save, post_save, pre_delete, post_delete, m2m_changed
 from django.dispatch import receiver
+import os
+from ecommerce.settings import MEDIA_ROOT
 class Product(models.Model):
     product_name = models.CharField(max_length=100,unique=True)
     product_price = models.IntegerField()
@@ -41,11 +43,21 @@ class User(models.Model):
     user_cart = models.JSONField(null=True)
     user_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     user_address = models.JSONField(null=True,blank=True)
-    # user_del = models.BooleanField(default=False)
-    
+
+
     def save(self,*args,**kargs):
         super(User,self).save(*args,**kargs)
     
+@receiver(pre_delete, sender=User)
+def pre_delete_img(sender,instance, **kwargs):
+    img_path=os.path.join(MEDIA_ROOT,str(instance.user_image))
+    if os.path.exists(img_path):
+        os.remove(img_path)
+    
+@receiver(post_save, sender=User)
+def post_delete_msg(sender, instance, **kwargs):
+    print("Thank you for visiting!",{instance.user_name})
+
 @receiver(pre_save, sender=User)
 def post_save_receiver(sender, instance, **kwargs):
     instance.user_address = []

@@ -15,6 +15,7 @@ urlpatterns = [
     path("search/filter-sort",views.filter_sort,name="filter_sort"),
     
     # User Crud
+    path("delete_account/<str:user_username>/",views.del_account,name="del_account"),
     path("login/",views.login,name='user_login'),
     path('logout_user/',views.logout_user,name='logout_user'),
     path('signup/',views.signup_update,name='user_signup'),

@@ -315,6 +315,11 @@ def add_address(request):
         print(user,"---------------------------------")
     return redirect("cart_order")
 
+def del_account(request,user_username):
+    del request.session['logged_user']
+    user=User.objects.filter(user_username=user_username)
+    user.delete()
+    return redirect("show_product")
 
 # def error_404(request,exception=None):
     # return render(request, '404.html',  status=404)
