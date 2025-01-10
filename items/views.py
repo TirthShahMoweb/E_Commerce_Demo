@@ -11,7 +11,7 @@ def show_product(request):
     else:
         user=None
     all_companies_name = Product.objects.values('product_company_name').distinct()
-    all_products = Product.objects.all()
+    all_products = Product.objects.filter(product_del=False)
     logged_user = request.session.get('logged_user')  # Retrieve logged user from session
     return render(request, "items/show_products.html", {
         'user' : user,
@@ -52,13 +52,17 @@ def product_details(request, product_slug):
             request.session['quantity']=1
     else:
         request.session['product_slug']=product_slug
+    user_role=None
     if 'logged_user' in request.session:
         user_role=User.objects.filter(user_username=request.session['logged_user']).values_list('user_role').first()
-    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity'],'user_role':user_role[0]})
+        user_role=user_role[0]
+    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity'],'user_role':user_role})
 
-def product_delete(product_slug):
-    del_product = Product.objects.filter(product_slug=product_slug)
-    del_product.delete()
+def product_delete(request,product_slug):
+    del_product = Product.objects.filter(product_slug=product_slug).first()
+    del_product.product_del=True
+    del_product.save()
+    # del_product.delete()  
     return redirect('show_product')
 
 def search_products(request):
@@ -68,7 +72,7 @@ def search_products(request):
         user=None
     search_data = request.GET.get("query")
     all_companies_name = Product.objects.values('product_company_name').distinct()
-    products = Product.objects.all()
+    products = Product.objects.filter(product_del=False)
     if search_data:
         products = products.filter(product_name__icontains=search_data)
     return render(request, "items/searched_product.html", {
@@ -83,7 +87,7 @@ def filter_sort(request):
     selected_company_data = request.GET.get("companies")
     search_data = request.GET.get("query")
     all_companies_name = Product.objects.values('product_company_name').distinct()
-    products = Product.objects.all()
+    products = Product.objects.filter(product_del=False)
     if search_data:
         products = products.filter(product_name__icontains=search_data)
     if selected_company_data:

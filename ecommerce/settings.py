@@ -127,7 +127,7 @@ STATIC_ROOT = BASE_DIR / 'productionfiles'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_DIR / "items\static"]
 
 
 SESSION_COOKIE_AGE = 86400  
