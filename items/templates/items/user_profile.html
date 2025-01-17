@@ -46,6 +46,14 @@
             <a href="{% url 'del_account' i.user_username %}">
                 <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Delete</button>
             </a>
+            <a href="{% url 'send_mail' i.user_username %}" onclick="showPasswordResetAlert()">
+                <button class="btn" style="background-color:#4CAF50; color: #fff;">Change Password</button>
+            </a>
+            <script>
+                function showPasswordResetAlert() {
+                    alert("A password reset link has been sent to your registered email address. Please check your email to update your password.");
+                }
+            </script>
         </div>
         {% endfor %}
     </div>

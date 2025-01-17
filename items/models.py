@@ -50,11 +50,12 @@ class User(models.Model):
     
 @receiver(pre_delete, sender=User)
 def pre_delete_img(sender,instance, **kwargs):
-    img_path=os.path.join(MEDIA_ROOT,str(instance.user_image))
-    if os.path.exists(img_path):
-        os.remove(img_path)
+    if instance.user_image:
+        img_path=os.path.join(MEDIA_ROOT,str(instance.user_image))
+        if os.path.exists(img_path):
+            os.remove(img_path)
     
-@receiver(post_save, sender=User)
+@receiver(post_delete, sender=User)
 def post_delete_msg(sender, instance, **kwargs):
     print("Thank you for visiting!",{instance.user_name})
 

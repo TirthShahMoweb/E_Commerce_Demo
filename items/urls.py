@@ -15,9 +15,13 @@ urlpatterns = [
     path("search/filter-sort",views.filter_sort,name="filter_sort"),
     
     # User Crud
+    path("change_pass/<str:user_username>/",views.change_password,name="change_pass"),
     path("delete_account/<str:user_username>/",views.del_account,name="del_account"),
     path("login/",views.login,name='user_login'),
+    path('login/otp/',views.valid_otp,name='valid_otp'),
+    path('login/resend_otp/',views.resend_otp,name='resend_otp'),
     path('logout_user/',views.logout_user,name='logout_user'),
+    path("send_email/<str:user_username>/",views.mail_password_change,name="send_mail"),
     path('signup/',views.signup_update,name='user_signup'),
     path("user_update/<str:user_username>/",views.signup_update,name="update_user"),
     path('user_profile/',views.user_profile,name='user_profile'),
