@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
+{% load custom_filters %}
+
 
 {% block title %}E-Commerce{% endblock %}
 {% block css_files %}
@@ -18,16 +20,18 @@
             <div class="order-item">
                 <div class="item-details">
                     <h3>{{product.product_name}}</h3>
-                    <p>Qty: 2</p>
+                    <p>Qty: {{quantity}}</p>
                     <p>Price: {{product.product_price}}</p>
                 </div>
                 <div class="item-total" >
-                    <h3>Total: ₹{{product.product_price}}</h3>
+                {%with total_price=product.product_price|multiply:quantity%}
+                    <h3>Total: ₹{{total_price}}</h3>
                 </div>
             </div>
             <div class="total-price">
-                <h2>Total Bill: ₹{{product.product_price}}</h2>
+                <h2>Total Bill: ₹{{total_price}}</h2>
             </div>
+            {%endwith%}
         </div>
 
         <div class="billing-info">

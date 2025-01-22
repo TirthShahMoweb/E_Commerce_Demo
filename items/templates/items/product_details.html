@@ -30,11 +30,23 @@
             </div>
             <br>
              <div class="quantity-control">
-                <a href="{% url 'decrease' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == 1 %} disabled {% endif %}>-</button></a>
+                <a href="{% url 'decrease' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == 1 or product.product_quantity == 0 %} disabled {% endif %}>-</button></a>
                 <span class="quantity-display" id="quantity-display" style="font-size:1.5rem; font-weight: bold;text-align: center;width: 50px;display: inline-block;background-color:white;padding: 6px;border: 1px solid #ddd;border-radius: 4px;">{{quantity}}</span>
-                <a href="{% url 'increase' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == product.product_quantity %} disabled {% endif %}>+</button></a>
-                <a href="{% url 'add-to-cart' product.product_slug %}" class="btn btn-warning btn-lg" style="background-color:#FFC300; border-color: red; color: white; text-decoration: none;">Cart</a>
-                <a href="{% url 'product_order' product.product_slug %}" class="btn btn-success btn-lg order-btn" style="text-decoration: none;">Buy Now</a>
+                <a href="{% url 'increase' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == product.product_quantity or product.product_quantity == 0 %} disabled {% endif %}>+</button></a>
+                <a href="{% url 'add-to-cart' product.product_slug %}" 
+                        class="btn btn-warning btn-lg" 
+                        style="background-color:#FFC300; border-color: red; color: white; text-decoration: none;" 
+                        {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>
+                        Cart
+</a>
+
+<a href="{% url 'product_order' product.product_slug %}" 
+   class="btn btn-success btn-lg order-btn" 
+   style="text-decoration: none;" 
+   {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>
+   Buy Now
+</a>
+
             </div>
             <br>
             <!-- Action Buttons -->

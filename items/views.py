@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, User
+from .models import Product, User, Order
 from .forms import ProductForm, UserForm
 from django.utils.text import slugify
 from django.core.mail import send_mail
@@ -45,13 +45,19 @@ def add_or_update_product(request, product_slug=None):
 def product_details(request, product_slug):
     identified_product = list(Product.objects.filter(product_slug=product_slug).values())
     if 'quantity' not in request.session:
-        request.session['quantity']=1
+        if identified_product[0]['product_quantity']==0:
+            request.session['quantity']=0
+        else:
+            request.session['quantity']=1
     if 'product_slug' in request.session:
         if product_slug!=request.session['product_slug']:
             del request.session['product_slug']
             del request.session['quantity']
             request.session['product_slug']=product_slug
-            request.session['quantity']=1
+            if identified_product[0]['product_quantity']==0:
+                request.session['quantity']=0
+            else:
+                request.session['quantity']=1
     else:
         request.session['product_slug']=product_slug
     user_role=None
@@ -117,22 +123,7 @@ def login(request):
         user = User.objects.filter(user_username=user_name).first()
         if user:  # Check credentials
             request.session['check_user'] = user_name
-            otp = generate_OTP()
-            request.session['otp'] = otp
-            subject = "Your One-Time Password (OTP) for Login"
-            message = f'''Dear {user.user_name},
-
-We received a request to log in to your account on E-commerce Demo. To proceed, please use the following One-Time Password (OTP):
-
-{otp}
-
-If you did not request this login attempt, please disregard this email or contact our support team immediately.
-
-For your security, do not share this OTP with anyone. Our team will never ask you for your password or OTP.
-
-If you need assistance, feel free to reach us.
-'''
-            send_email(subject,message,[user.user_email])
+            send_otp(request)
             return redirect('valid_otp')
         else:
             msg = "Invalid username or password"
@@ -146,7 +137,7 @@ def send_email(subject,message,user_email):
     send_mail(
         subject,message,settings.EMAIL_HOST_USER,user_email)
 
-def resend_otp(request):
+def send_otp(request):
     user = User.objects.filter(user_username=request.session['check_user']).first()
     otp = generate_OTP()
     request.session['otp'] = otp
@@ -164,6 +155,9 @@ For your security, do not share this OTP with anyone. Our team will never ask yo
 If you need assistance, feel free to reach us.
 '''
     send_email(subject,message,[user.user_email])
+
+def resend_otp(request):
+    send_otp(request)
     return render(request,'items/otp.html')
 
 def change_password(request,user_username):
@@ -283,11 +277,11 @@ def add_to_cart(request, product_slug):
     return redirect("show_product")
 
 def show_cart(request):
-    total_value=0
+    total_value = 0
     logged_user = request.session.get('logged_user')
     if 'logged_user' in request.session:
-        user=User.objects.filter(user_username=request.session['logged_user']).first()
-        cart=User.objects.filter(user_username=request.session['logged_user']).values_list('user_cart', flat=True).first()
+        user = User.objects.filter(user_username=request.session['logged_user']).first()
+        cart = User.objects.filter(user_username=request.session['logged_user']).values_list('user_cart', flat=True).first()
         if cart is not None:
             logged_user_cart=Product.objects.filter(id__in=cart)
             price=Product.objects.filter(id__in=cart).values('product_price','id')
@@ -303,7 +297,7 @@ def show_cart(request):
             total_value=0
             cart=request.session['cart']
             for i in price:
-                total_value+=cart[str(i['id'])]*i['product_price']        
+                total_value+=cart[str(i['id'])]*i['product_price']       
         else:
             cart=None
             total_value=0
@@ -319,13 +313,38 @@ def user_profile(request):
     return render(request,'items/user_profile.html',{'logged_user':logged_user})
 
 def order(request,product_slug):
+    # if 'logged_user' in request.session:
+    #     product=Product.objects.filter(product_slug=product_slug).first()
+    #     user=User.objects.filter(user_username=request.session['logged_user']).first()
+    #     quantity=int(request.session['quantity'])
+    #     # user_pk = request.session['logged_user']
+    #     user_order=Order(product=product.id,
+    #                     user=user.user_username,
+    #                     quantity=quantity)
+    #     user_order.save()
+    #     product.product_quantity-=quantity
+    #     product.save()
+    #     msg="Order has been Successfully Placed"
+    #     return render(request,'items/product_order.html',{'product':product,'message':msg,'user':user,'quantity':request.session['quantity']})
+    # else:
+    #     return redirect('user_login')
     if 'logged_user' in request.session:
-        product=Product.objects.filter(product_slug=product_slug).first()
-        # product.product_quantity-=1
-        # product.save()
+        # Fetch the product using the slug
+        product = Product.objects.filter(product_slug=product_slug).first()
+        user_username = request.session['logged_user']
+        quantity = int(request.session.get('quantity'))
+        user_order = Order(user_id=user_username, product=product, quantity=quantity)
+        user_order.save()
+        product.product_quantity -= quantity
+        product.save()
+        del request.session['quantity']
         user=User.objects.filter(user_username=request.session['logged_user']).first()
-        msg="Order has been Successfully Placed"
-        return render(request,'items/product_order.html',{'product':product,'message':msg,'user':user})
+        msg = "Order has been successfully placed"
+        return render(
+            request,
+            'items/product_order.html',
+            {'product': product, 'message': msg, 'user': user, 'quantity': quantity}
+        )
     else:
         return redirect('user_login')
 
@@ -361,6 +380,14 @@ def desc_value(request,product_slug):
         request.session['quantity'] -= 1
     return redirect('product_detail', product_slug=product_slug)
 
+def inc_value(request, product_slug):
+    request.session['product_slug'] = product_slug
+    if 'quantity' not in request.session:
+        request.session['quantity'] = 2
+    else:
+        request.session['quantity'] += 1
+    return redirect('product_detail', product_slug=product_slug)
+    
 def desc_value_cart(request,product_slug):
     product_id = Product.objects.filter(product_slug=product_slug).values_list(flat=True).first()
     
@@ -399,14 +426,6 @@ def inc_value_cart(request,product_slug):
         request.session['cart']=cart
     return redirect('show_cart')
 
-def inc_value(request, product_slug):
-    request.session['product_slug'] = product_slug
-    if 'quantity' not in request.session:
-        request.session['quantity'] = 2
-    else:
-        request.session['quantity'] += 1
-    return redirect('product_detail', product_slug=product_slug)
-  
 def add_address(request):
     if request.method == "POST":
         address=request.POST.get("user_address")

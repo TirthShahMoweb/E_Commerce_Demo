@@ -5,6 +5,7 @@ from django.db.models.signals import pre_save, post_save, pre_delete, post_delet
 from django.dispatch import receiver
 import os
 from ecommerce.settings import MEDIA_ROOT
+
 class Product(models.Model):
     product_name = models.CharField(max_length=100,unique=True)
     product_price = models.IntegerField()
@@ -44,7 +45,6 @@ class User(models.Model):
     user_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     user_address = models.JSONField(null=True,blank=True)
 
-
     def save(self,*args,**kargs):
         super(User,self).save(*args,**kargs)
     
@@ -62,3 +62,9 @@ def post_delete_msg(sender, instance, **kwargs):
 @receiver(pre_save, sender=User)
 def post_save_receiver(sender, instance, **kwargs):
     instance.user_address = []
+
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', to_field='user_username')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
+    order_date = models.DateField(auto_now_add=True)
+    quantity = models.IntegerField(default=1)
