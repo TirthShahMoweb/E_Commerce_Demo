@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}E_Commerce{% endblock %}
+{% block css_files %}
+<link rel="stylesheet" href="{% static 'items/signup.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <!-- Home icon positioned inside the box, top-left corner -->
+    <a href="{%url 'show_product'%}" class="home-icon-link">
+        <span class="home-icon">&#127968;</span>
+    </a>
+
+    <h2>Verify OTP</h2>
+
+    <form method="POST" action="{% url 'valid_otp' %}">
+        {% csrf_token %}
+        <div class="input-group">
+            <label for="otp">Enter OTP</label>
+            <input type="number" id="otp" name="otp" placeholder="Enter the OTP" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <a href="{% url 'resend_otp' %}">
+    <button class="btn btn-primary" style="margin-top: 10px;">Resend OTP</button>
+    </a>
+    <script>
+        function resendOTP() {
+            alert('OTP has been resent!');
+            // Add logic to trigger the backend for resending OTP
+        }
+    </script>
+</div>
+
+{% endblock %}
