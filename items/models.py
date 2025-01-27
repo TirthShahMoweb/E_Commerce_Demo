@@ -64,7 +64,7 @@ def post_save_receiver(sender, instance, **kwargs):
     instance.user_address = []
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user', to_field='user_username')
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_orders', to_field='user_username')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_order')
     order_date = models.DateField(auto_now_add=True)
     quantity = models.IntegerField(default=1)

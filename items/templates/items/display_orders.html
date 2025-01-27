@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static "items/display_order.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div class="cart-header">Your Orders</div>
+    <div class="cart-container">
+        <a href="{% url 'show_product' %}" class="btn btn-secondary btn-lg" 
+           style="background-color: grey; border-color: grey; color: white; text-decoration: none;">Back to Products</a>
+        <br/>
+        <br/>
+
+        <!-- Filter Form -->
+        <form method="get" action="" class="filter-form" style="display: flex; gap: 20px; align-items: center; margin-bottom: 20px;">
+            <label for="start_date" style="font-weight: bold;">Start Date:</label>
+            <input type="date" id="start_date" name="start_date" 
+                   value="{{ request.GET.start_date }}" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+
+            <label for="end_date" style="font-weight: bold;">End Date:</label>
+            <input type="date" id="end_date" name="end_date" 
+                   value="{{ request.GET.end_date }}" style="padding: 5px; border-radius: 5px; border: 1px solid #ccc;">
+
+            <button type="submit" class="btn btn-primary" 
+                    style="background-color: #4CAF50; border-color: #4CAF50; color: white;">Filter</button>
+        </form>
+
+        <!-- Orders -->
+        {% if user_orders %}
+            {% for i in user_orders %}
+            <div class="cart-item">
+                <div class="item-details">
+                    <a href="{% url 'product_detail' i.product.product_slug %}" class="product-link">
+                        <div class="item-name">{{ i.product.product_name }}</div>
+                    </a>
+                    Date: {{ i.order_date }}
+                </div>
+                <div class="item-quantity">Quantity: {{ i.quantity }}</div>
+                <br/>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="font-size: 1.2rem; color: grey;">No orders found for the selected date range.</p>
+        {% endif %}
+    </div>
+{% endblock %}

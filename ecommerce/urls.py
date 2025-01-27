@@ -18,8 +18,12 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from ecommerce import settings
-    
+# from django.shortcuts import redirect
+# def home_redirect(request):
+#     return redirect('/products/')
+
 urlpatterns = [
+    # path('', home_redirect),
     path('admin/', admin.site.urls),
     path('',include("items.urls"))
 ]
