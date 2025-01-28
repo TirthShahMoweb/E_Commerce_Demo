@@ -234,17 +234,22 @@ def signup_update(request,user_username=None):
     if request.method == 'POST':
         user_form = UserForm(request.POST,request.FILES, instance=user)
         if user_form.is_valid():
-            user = user_form.save()              
+            print(user_form)
+            user = user_form.save()
+            print(user.user_username,"6555555555555555")
+            print(user.user_name,"6555555555555555")
+            print(user.user_email,"6555555555555555")
+            print(user.user_gender,"6555555555555555")
             request.session['logged_user'] = user.user_username  # Store user in session 
             if 'cart'in request.session:
                 user=User.objects.filter(user_username=request.session['logged_user']).first()
                 if user.user_cart is None:
                     user.user_cart=request.session['cart']
                 user.save()
-            
-            subject="Welcome to E-commerce Demo - We're Thrilled to Have You!"
-            message=f"Dear {user.user_name},\n Welcome to E-commerce Demo! We're thrilled to have you join our growing community of shoppers who love discovering incredible deals, exclusive products, and a seamless online shopping experience."
-            send_email(subject,message,[user.user_email])
+            if user_username is None:
+                subject="Welcome to E-commerce Demo - We're Thrilled to Have You!"
+                message=f"Dear {user.user_name},\n Welcome to E-commerce Demo! We're thrilled to have you join our growing community of shoppers who love discovering incredible deals, exclusive products, and a seamless online shopping experience."
+                send_email(subject,message,[user.user_email])
             return redirect('show_product')
     else:
         user_form = UserForm(instance=user)

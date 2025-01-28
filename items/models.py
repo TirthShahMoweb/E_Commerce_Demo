@@ -27,6 +27,11 @@ def create_product_slug(sender, instance, **kwargs):
         instance.product_slug = slugify(instance.product_name)
 
 class User(models.Model):
+    class GenderChoices(models.TextChoices):
+        MALE = 'M', 'Male'
+        FEMALE = 'F', 'Female'
+        OTHER = 'O', 'Other'
+
     user_username = models.CharField(max_length=18,primary_key=True,validators=[
                     RegexValidator(regex=r'^[a-zA-Z0-9_]+$',
                     message='Username can only contain letters, numbers, and underscores.',
@@ -38,6 +43,7 @@ class User(models.Model):
                     RegexValidator(regex=r'^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$',
                     message=("Password must contain at least 8 characters, "
                     "including one uppercase letter, one number, and one special character."))])
+    user_gender = models.CharField(max_length=1, choices=GenderChoices.choices)
     user_age = models.IntegerField()
     user_role = models.CharField(max_length=25)
     user_order = models.JSONField(null=True)
