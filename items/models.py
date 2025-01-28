@@ -4,6 +4,7 @@ from django.core.validators import RegexValidator,MinLengthValidator
 from django.db.models.signals import pre_save, post_save, pre_delete, post_delete, m2m_changed
 from django.dispatch import receiver
 import os
+import uuid
 from ecommerce.settings import MEDIA_ROOT
 
 class Product(models.Model):
@@ -25,6 +26,12 @@ class Product(models.Model):
 def create_product_slug(sender, instance, **kwargs):
     if not instance.product_slug:
         instance.product_slug = slugify(instance.product_name)
+
+def unique_profile_pic_path(instance, filename):
+    ext = os.path.splitext(filename)[1]  # e.g., .jpg or .png
+    unique_filename = f"{uuid.uuid4()}{ext}"
+    # Return the full upload path
+    return os.path.join("profile_pics/", unique_filename)
 
 class User(models.Model):
     class GenderChoices(models.TextChoices):
@@ -48,7 +55,7 @@ class User(models.Model):
     user_role = models.CharField(max_length=25)
     user_order = models.JSONField(null=True)
     user_cart = models.JSONField(null=True)
-    user_image = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
+    user_image = models.ImageField(upload_to=unique_profile_pic_path, null=True, blank=True)
     user_address = models.JSONField(null=True,blank=True)
 
     def save(self,*args,**kargs):

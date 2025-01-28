@@ -236,10 +236,6 @@ def signup_update(request,user_username=None):
         if user_form.is_valid():
             print(user_form)
             user = user_form.save()
-            print(user.user_username,"6555555555555555")
-            print(user.user_name,"6555555555555555")
-            print(user.user_email,"6555555555555555")
-            print(user.user_gender,"6555555555555555")
             request.session['logged_user'] = user.user_username  # Store user in session 
             if 'cart'in request.session:
                 user=User.objects.filter(user_username=request.session['logged_user']).first()
