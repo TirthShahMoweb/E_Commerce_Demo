@@ -1,7 +1,9 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Product, User, Order
 from .forms import ProductForm, UserForm
 from django.utils.text import slugify
+from datetime import datetime
 from django.core.mail import send_mail
 from ecommerce import settings
 import random
@@ -12,6 +14,7 @@ def show_product(request):
         user=User.objects.filter(user_username=request.session['logged_user']).first()
     else:
         user=None
+    
     all_companies_name = Product.objects.values('product_company_name').distinct()
     all_products = Product.objects.filter(product_del=False)
     logged_user = request.session.get('logged_user')  # Retrieve logged user from session
@@ -49,6 +52,7 @@ def product_details(request, product_slug):
             request.session['quantity']=0
         else:
             request.session['quantity']=1
+    
     if 'product_slug' in request.session:
         if product_slug!=request.session['product_slug']:
             del request.session['product_slug']
@@ -60,6 +64,7 @@ def product_details(request, product_slug):
                 request.session['quantity']=1
     else:
         request.session['product_slug']=product_slug
+    
     user_role=None
     if 'logged_user' in request.session:
         user_role=User.objects.filter(user_username=request.session['logged_user']).values_list('user_role').first()
@@ -78,6 +83,7 @@ def search_products(request):
         user=User.objects.filter(user_username=request.session['logged_user']).first()
     else:
         user=None
+    
     search_data = request.GET.get("query")
     all_companies_name = Product.objects.values('product_company_name').distinct()
     products = Product.objects.filter(product_del=False)
@@ -168,9 +174,6 @@ def change_password(request,user_username):
         confirm_new_pass = request.POST.get('confirm_password')
         # user=request.session['logged_user']
         old_pass = User.objects.filter(user_username=user_username).first()
-        print(current_password ,old_pass.user_password)
-        print(new_pass)
-        print(confirm_new_pass)
         if old_pass.user_password == current_password and new_pass==confirm_new_pass:
             old_pass.user_password=confirm_new_pass
             old_pass.save()
@@ -179,7 +182,6 @@ def change_password(request,user_username):
             msg='Current password is incorrect.'
         elif new_pass!=confirm_new_pass:
             msg='New password and Confirm password are not same.'
-        print(msg)
     return render(request, 'items/change_password.html', {'msg': msg, 'user_username': user_username})
 
 def mail_password_change(request,user_username):
@@ -205,8 +207,6 @@ def valid_otp(request):
     if request.method=='POST':
         entered_otp = int(request.POST.get("otp"))
         session_otp = request.session.get("otp")
-        print(type(entered_otp),entered_otp)
-        print(type(session_otp),session_otp)
         if entered_otp==session_otp:
             user = request.session['check_user']
             request.session['logged_user'] = user
@@ -234,17 +234,22 @@ def signup_update(request,user_username=None):
     if request.method == 'POST':
         user_form = UserForm(request.POST,request.FILES, instance=user)
         if user_form.is_valid():
-            user = user_form.save()              
+            print(user_form)
+            user = user_form.save()
+            print(user.user_username,"6555555555555555")
+            print(user.user_name,"6555555555555555")
+            print(user.user_email,"6555555555555555")
+            print(user.user_gender,"6555555555555555")
             request.session['logged_user'] = user.user_username  # Store user in session 
             if 'cart'in request.session:
                 user=User.objects.filter(user_username=request.session['logged_user']).first()
                 if user.user_cart is None:
                     user.user_cart=request.session['cart']
                 user.save()
-            
-            subject="Welcome to E-commerce Demo - We're Thrilled to Have You!"
-            message=f"Dear {user.user_name},\n Welcome to E-commerce Demo! We're thrilled to have you join our growing community of shoppers who love discovering incredible deals, exclusive products, and a seamless online shopping experience."
-            send_email(subject,message,[user.user_email])
+            if user_username is None:
+                subject="Welcome to E-commerce Demo - We're Thrilled to Have You!"
+                message=f"Dear {user.user_name},\n Welcome to E-commerce Demo! We're thrilled to have you join our growing community of shoppers who love discovering incredible deals, exclusive products, and a seamless online shopping experience."
+                send_email(subject,message,[user.user_email])
             return redirect('show_product')
     else:
         user_form = UserForm(instance=user)
@@ -268,7 +273,6 @@ def add_to_cart(request, product_slug):
         del request.session['quantity']
     else:
         cart[str(product['id'])] += request.session['quantity']
-        print(cart)
         del request.session['quantity']
     if 'logged_user' in request.session:
             user.user_cart=cart
@@ -313,23 +317,7 @@ def user_profile(request):
     return render(request,'items/user_profile.html',{'logged_user':logged_user})
 
 def order(request,product_slug):
-    # if 'logged_user' in request.session:
-    #     product=Product.objects.filter(product_slug=product_slug).first()
-    #     user=User.objects.filter(user_username=request.session['logged_user']).first()
-    #     quantity=int(request.session['quantity'])
-    #     # user_pk = request.session['logged_user']
-    #     user_order=Order(product=product.id,
-    #                     user=user.user_username,
-    #                     quantity=quantity)
-    #     user_order.save()
-    #     product.product_quantity-=quantity
-    #     product.save()
-    #     msg="Order has been Successfully Placed"
-    #     return render(request,'items/product_order.html',{'product':product,'message':msg,'user':user,'quantity':request.session['quantity']})
-    # else:
-    #     return redirect('user_login')
     if 'logged_user' in request.session:
-        # Fetch the product using the slug
         product = Product.objects.filter(product_slug=product_slug).first()
         user_username = request.session['logged_user']
         quantity = int(request.session.get('quantity'))
@@ -353,7 +341,6 @@ def cart_order(request):
     if 'logged_user' in request.session:
         user=User.objects.filter(user_username=request.session['logged_user']).first()
         product=Product.objects.filter(id__in=(user.user_cart)).values()
-        print(user)
         total_price=0
         for i in product:
             total_price+=user.user_cart[str(i['id'])]*i['product_price']
@@ -410,13 +397,24 @@ def desc_value_cart(request,product_slug):
     
     return redirect('show_cart')
 
+def see_order(request,user_username):
+    if request.method=='GET':
+        start_date=request.GET.get('start_date')
+        end_date=request.GET.get('end_date')
+    users = User.objects.get(user_username=user_username)
+    if start_date and end_date:
+        user_orders = users.user_orders.filter(order_date__range=[start_date,end_date])
+    else:
+        user_orders = users.user_orders.all()
+    return render(request,'items/display_orders.html',{'user_orders':user_orders})
+
 def inc_value_cart(request,product_slug):
     product_id = Product.objects.filter(product_slug=product_slug).values_list(flat=True).first()
     if 'logged_user' in request.session:
-        user=User.objects.filter(user_username=request.session['logged_user']).first()
-        cart=user.user_cart
+        user = User.objects.filter(user_username=request.session['logged_user']).first()
+        cart = user.user_cart
     else:
-        cart=request.session['cart']
+        cart = request.session['cart']
     cart[str(product_id)] += 1
     
     if 'logged_user' in request.session:
@@ -435,7 +433,6 @@ def add_address(request):
         else:
             user.user_address=(user.user_address).append(address)
         user.save()
-        print(user,"---------------------------------")
     return redirect("cart_order")
 
 def del_account(request,user_username):

@@ -55,7 +55,7 @@ class ProductForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     class Meta:
         model=User
-        fields=['user_username','user_name','user_email','user_mobile','user_password','user_age' ,'user_role','user_image']
+        fields=['user_username','user_name','user_email','user_mobile','user_password','user_age' ,'user_role','user_image','user_gender']
     
     user_username = forms.CharField(
     max_length=18,
@@ -112,6 +112,13 @@ class UserForm(forms.ModelForm):
         label="Profile Photo",
         required=False,  # Optional to allow users to skip this
         widget=forms.FileInput(attrs={'class': 'form-control', 'accept': 'image/*'}),  # Allows only image uploads
+    )
+
+    user_gender = forms.ChoiceField(
+        choices=User.GenderChoices.choices,
+        widget=forms.Select(attrs={'class': 'form-control'}),
+        label="Gender",
+        required=True
     )
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
