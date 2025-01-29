@@ -14,8 +14,6 @@ db.sqlite3
 # Ignore media files
 media/
 
-# Ignore static files (if not committed)
-static/
 
 # Ignore virtual environment directory
 venv/
