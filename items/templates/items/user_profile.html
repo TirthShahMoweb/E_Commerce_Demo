@@ -37,25 +37,25 @@
         </div>
 
         <div class="profile-actions">
+        <!-- Main Actions -->
             <a href="{% url 'show_cart' %}">
                 <button class="btn" style="background-color: #FFC300;color: #fff;">Your Cart</button></a>
+            <a href="{% url 'display_orders' i.user_username %}">
+                <button class="btn" style="background-color: #007bff; color: #fff;">Orders</button></a>
+            <a href="{% url 'display_wishlist' i.user_username %}">
+                <button class="btn" style="background-color: #64b5f6; color: #fff;">Wishlist</button></a>
+
+            <!-- Edit Actions -->
             <a href="{% url 'update_user' i.user_username %}">
                 <button class="btn" style="background-color: #348eaf; color: #fff;">Edit</button></a>
+            <a href="{% url 'send_mail' i.user_username %}" onclick="showPasswordResetAlert()">
+                <button class="btn" style="background-color: #4CAF50; color: #fff;">Change Password</button></a>
+
+            <!-- Account Actions -->
             <a href="{% url 'logout_user' %}">
                 <button class="btn" style="background-color: rgb(128, 128, 128); color: #fff;">Logout</button></a>
             <a href="{% url 'del_account' i.user_username %}">
-                <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Delete</button>
-            </a>
-            <a href="{% url 'send_mail' i.user_username %}" onclick="showPasswordResetAlert()">
-                <button class="btn" style="background-color:#4CAF50; color: #fff;">Change Password</button></a>
-            <a href="{% url 'see_orders' i.user_username %}">
-                <button class="btn" style="background-color: #007bff; color: #fff;">Orders</button>
-            </a>
-            <script>
-                function showPasswordResetAlert() {
-                    alert("A password reset link has been sent to your registered email address. Please check your email to update your password.");
-                }
-            </script>
+                <button class="btn" style="background-color: rgb(221, 33, 33); color: #fff;">Delete</button></a>
         </div>
         {% endfor %}
     </div>

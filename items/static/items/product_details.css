@@ -70,3 +70,23 @@
     background-color: #0056b3;
 }
 
+.heart-icon {
+    position: absolute;
+    top: 40px;
+    /* Adjust as needed */
+    right: 395px;
+    /* Adjust as needed */
+    font-size: 2rem;
+    /* Increase size */
+    cursor: pointer;
+    /* Add hover effect */
+    transition: transform 0.2s ease, color 0.2s ease;
+    /* Smooth hover effects */
+}
+
+.heart-icon:hover {
+    transform: scale(1.2);
+    /* Slightly enlarge on hover */
+    color: red;
+    /* Change color on hover */
+}

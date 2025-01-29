@@ -3,6 +3,7 @@ from django.db import models
 from django.core.validators import RegexValidator,MinLengthValidator
 from django.db.models.signals import pre_save, post_save, pre_delete, post_delete, m2m_changed
 from django.dispatch import receiver
+
 import os
 import uuid
 from ecommerce.settings import MEDIA_ROOT
@@ -57,23 +58,24 @@ class User(models.Model):
     user_cart = models.JSONField(null=True)
     user_image = models.ImageField(upload_to=unique_profile_pic_path, null=True, blank=True)
     user_address = models.JSONField(null=True,blank=True)
+    user_wishlist = models.ManyToManyField(Product, related_name='user_wishlist_User', blank=True)
 
     def save(self,*args,**kargs):
         super(User,self).save(*args,**kargs)
-    
+
 @receiver(pre_delete, sender=User)
 def pre_delete_img(sender,instance, **kwargs):
     if instance.user_image:
         img_path=os.path.join(MEDIA_ROOT,str(instance.user_image))
         if os.path.exists(img_path):
             os.remove(img_path)
-    
+
 @receiver(post_delete, sender=User)
 def post_delete_msg(sender, instance, **kwargs):
     print("Thank you for visiting!",{instance.user_name})
 
 @receiver(pre_save, sender=User)
-def post_save_receiver(sender, instance, **kwargs):
+def pre_save_receiver(sender, instance, **kwargs):
     instance.user_address = []
 
 class Order(models.Model):
@@ -81,3 +83,22 @@ class Order(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='product_order')
     order_date = models.DateField(auto_now_add=True)
     quantity = models.IntegerField(default=1)
+
+
+@receiver(m2m_changed, sender=User.user_wishlist.through)
+def wishlist_changed(sender, instance, action, reverse, model, pk_set, **kwargs):
+    """
+    Handles changes in the User's wishlist (ManyToManyField).
+    """
+    if action == "pre_add":
+        print(f"Wishlist: Products about to be added: {pk_set} for user {instance.user_username}")
+    elif action == "post_add":
+        print(f"Wishlist: Products added: {pk_set} for user {instance.user_username}")
+    elif action == "pre_remove":
+        print(f"Wishlist: Products about to be removed: {pk_set} for user {instance.user_username}")
+    elif action == "post_remove":
+        print(f"Wishlist: Products removed: {pk_set} for user {instance.user_username}")
+    elif action == "pre_clear":
+        print(f"Wishlist: All products about to be cleared for user {instance.user_username}")
+    elif action == "post_clear":
+        print(f"Wishlist: All products cleared for user {instance.user_username}")

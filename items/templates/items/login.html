@@ -12,7 +12,7 @@
     <div class="login-box">
       <a href="{%url 'show_product'%}" class="home-icon-link">
         <span class="home-icon">&#127968;</span>
-    </a> 
+    </a>
         <h2>Login</h2>
 
         <!-- Display error messages only after form submission -->
@@ -22,7 +22,7 @@
         </div>
         {% endif %}
 
-        <form method="POST">  
+        <form method="POST">
             {% csrf_token %}
             <div class="input-group">
                 <label for="username">Username</label>
@@ -37,7 +37,7 @@
 </a>
         </form>
         <p class="signup-text">
-            Don't have an account? 
+            Don't have an account?
             <a href="{% url 'user_signup' %}">Sign up</a>
         </p>
 

@@ -35,9 +35,9 @@
         </a>
             </div>
             <div class="quantity-control">
-                <a href="{% url 'decrease_cart' i.product_slug %}"><button class="btn">-</button></a>
+                <a href="{% url 'change_value_cart' i.product_slug False %}"><button class="btn">-</button></a>
                 <span class="quantity-display" id="quantity-display" style="font-size:1.5rem; font-weight: bold;text-align: center;width: 50px;display: inline-block;background-color:white;padding: 6px;border: 1px solid #ddd;border-radius: 4px;">{% with quantity=cart|get_item:i.id%} {{quantity}}</span>
-                <a href="{% url 'increase_cart' i.product_slug %}"><button class="btn" {% if i.product_quantity == quantity %} disabled {%endif%}>+</button></a>
+                <a href="{% url 'change_value_cart' i.product_slug True %}"><button class="btn" {% if i.product_quantity == quantity %} disabled {%endif%}>+</button></a>
             </div>
                 <div class="item-total">
                     {% with total_price=i.product_price|multiply:quantity %}

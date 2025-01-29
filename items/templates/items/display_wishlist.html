@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Wishlist{% endblock %}
+
+{% block css_files %}
+<link rel="stylesheet" href="{% static "items/display_wishlist.css" %}">
+{% endblock %}
+
+{% block content %}
+    <div class="cart-header">Your Wishlist</div>
+    <div class="cart-container">
+        <a href="{% url 'show_product' %}" class="btn btn-secondary btn-lg"
+           style="background-color: grey; border-color: grey; color: white; text-decoration: none;">Back to Products</a>
+        <br/>
+        <br/>
+        <!-- Orders -->
+        {% if wishlist %}
+            {% for i in wishlist %}
+            <div class="cart-item">
+                <div class="item-details">
+                    <a href="{% url 'product_detail' i.product_slug %}" class="product-link">
+                        <span class="item-name">{{ i.product_name }}</span>
+                    </a>
+                </div>
+                <a href="{% url 'add_remove_wishlist' i.product_slug True %}" class="product-link">
+                    <div class="item-quantity">&#128465 </div>
+                <br/>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p style="font-size: 1.2rem; color: grey;">No items added to the Wishlist.</p>
+        {% endif %}
+    </div>
+{% endblock %}

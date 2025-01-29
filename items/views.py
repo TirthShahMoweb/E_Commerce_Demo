@@ -1,11 +1,10 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Product, User, Order
-from .forms import ProductForm, UserForm
 from django.utils.text import slugify
-from datetime import datetime
 from django.core.mail import send_mail
 from ecommerce import settings
+from .forms import ProductForm, UserForm
+from .models import Product, User, Order
 import random
 
 
@@ -14,7 +13,7 @@ def show_product(request):
         user=User.objects.filter(user_username=request.session['logged_user']).first()
     else:
         user=None
-    
+
     all_companies_name = Product.objects.values('product_company_name').distinct()
     all_products = Product.objects.filter(product_del=False)
     logged_user = request.session.get('logged_user')  # Retrieve logged user from session
@@ -30,18 +29,18 @@ def add_or_update_product(request, product_slug=None):
         product = get_object_or_404(Product, product_slug=product_slug)
         old_product_name = product.product_name
     else:
-        product = None  # No product to update, so we're adding a new one
+        product = None
 
     if request.method == 'POST':
         form = ProductForm(request.POST, instance=product)
         if form.is_valid():
-            form.save()  # Save the new or updated product
+            form.save()
             if product is not None and old_product_name != product.product_name:
                 product.product_slug = slugify(product.product_name)
                 product.save()
             return redirect('show_product')
     else:
-        form = ProductForm(instance=product)  # Populate form with existing product if updating
+        form = ProductForm(instance=product)
 
     return render(request, 'items/product_update.html', {'form': form})
 
@@ -52,7 +51,6 @@ def product_details(request, product_slug):
             request.session['quantity']=0
         else:
             request.session['quantity']=1
-    
     if 'product_slug' in request.session:
         if product_slug!=request.session['product_slug']:
             del request.session['product_slug']
@@ -64,18 +62,21 @@ def product_details(request, product_slug):
                 request.session['quantity']=1
     else:
         request.session['product_slug']=product_slug
-    
+
     user_role=None
     if 'logged_user' in request.session:
         user_role=User.objects.filter(user_username=request.session['logged_user']).values_list('user_role').first()
         user_role=user_role[0]
-    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity'],'user_role':user_role})
+        user = User.objects.get(user_username=request.session['logged_user'])
+        product = Product.objects.get(product_slug=product_slug)  # Get the product instance
+        exist = user.user_wishlist.filter(id=product.id).exists()
+    return render(request, "items/product_details.html", {'product': identified_product[0],'quantity':request.session['quantity'],'user_role':user_role,'exist':exist})
 
 def product_delete(request,product_slug):
     del_product = Product.objects.filter(product_slug=product_slug).first()
     del_product.product_del=True
     del_product.save()
-    # del_product.delete()  
+    # del_product.delete()
     return redirect('show_product')
 
 def search_products(request):
@@ -83,7 +84,7 @@ def search_products(request):
         user=User.objects.filter(user_username=request.session['logged_user']).first()
     else:
         user=None
-    
+
     search_data = request.GET.get("query")
     all_companies_name = Product.objects.values('product_company_name').distinct()
     products = Product.objects.filter(product_del=False)
@@ -198,12 +199,12 @@ If you did not request a password change, please ignore this email or contact ou
 
 For security reasons, this link will expire in [expiration time, e.g., 24 hours].
 
-Thank you,  
+Thank you,
 E-commerce Demo Support Team'''
     send_email(subject,message,[user.user_email])
     return redirect('show_product')
 
-def valid_otp(request):   
+def valid_otp(request):
     if request.method=='POST':
         entered_otp = int(request.POST.get("otp"))
         session_otp = request.session.get("otp")
@@ -261,7 +262,7 @@ def add_to_cart(request, product_slug):
     else:
         if 'cart' not in request.session:
             cart={}
-        else: 
+        else:
             cart = request.session['cart']
 
     if str(product['id']) not in cart:
@@ -297,7 +298,7 @@ def show_cart(request):
             total_value=0
             cart=request.session['cart']
             for i in price:
-                total_value+=cart[str(i['id'])]*i['product_price']       
+                total_value+=cart[str(i['id'])]*i['product_price']
         else:
             cart=None
             total_value=0
@@ -332,6 +333,29 @@ def order(request,product_slug):
     else:
         return redirect('user_login')
 
+def add_remove_wishlist(request,product_slug: str, flag):
+    if 'logged_user' in request.session:
+        user = User.objects.get(user_username=request.session['logged_user'])
+        product = Product.objects.get(product_slug=product_slug)
+        if not user.user_wishlist.filter(id=product.id).exists():
+            user.user_wishlist.add(Product.objects.get(product_slug=product_slug))
+        else:
+            user.user_wishlist.remove(Product.objects.get(product_slug=product_slug))
+        user.save()
+    else:
+        return redirect('user_login')
+    
+    if flag == 'True':
+        return redirect('display_wishlist', user_username = request.session['logged_user'])
+    else:
+        return redirect('product_detail', product_slug=product_slug)
+
+
+def display_wishlist(request,user_username: str):
+    user = User.objects.get(user_username = user_username)
+    wishlist = user.user_wishlist.all()
+    return render(request, 'items/display_wishlist.html', {'wishlist':wishlist})
+
 def cart_order(request):
     msg="Order has been Successfully Placed"
     if 'logged_user' in request.session:
@@ -343,7 +367,7 @@ def cart_order(request):
         if user.user_order is None:
             user.user_order=user.user_cart
         else:
-            
+
             for i in user.user_cart:
                 if i not in user.user_order:
                     user.user_order[i] = user.user_cart[i]
@@ -355,42 +379,40 @@ def cart_order(request):
     else:
         return redirect('user_login')
 
-def desc_value(request,product_slug):
+def change_value(request, product_slug, flag):
     request.session['product_slug'] = product_slug
     if 'quantity' not in request.session:
-        request.session['quantity'] = 1
+        if flag == 'True':
+            request.session['quantity'] = 2
+        else:
+            request.session['quantity'] = 1
     else:
-        request.session['quantity'] -= 1
+        if flag == 'True':
+            request.session['quantity'] += 1
+        else:
+            request.session['quantity'] -= 1
     return redirect('product_detail', product_slug=product_slug)
 
-def inc_value(request, product_slug):
-    request.session['product_slug'] = product_slug
-    if 'quantity' not in request.session:
-        request.session['quantity'] = 2
-    else:
-        request.session['quantity'] += 1
-    return redirect('product_detail', product_slug=product_slug)
-    
-def desc_value_cart(request,product_slug):
+def change_value_cart(request, product_slug, flag):
     product_id = Product.objects.filter(product_slug=product_slug).values_list(flat=True).first()
-    
     if 'logged_user' in request.session:
-        user=User.objects.filter(user_username=request.session['logged_user']).first()
-        cart=user.user_cart
+        user = User.objects.filter(user_username=request.session['logged_user']).first()
+        cart = user.user_cart
     else:
-        cart=request.session['cart']
-        
-    cart[str(product_id)] -= 1
+        cart = request.session['cart']
 
-    if cart[str(product_id)]==0:
-        cart.pop(str(product_id))
-    
+    if flag == 'True':
+        cart[str(product_id)] += 1
+    else:
+        cart[str(product_id)] -= 1
+        if cart[str(product_id)]==0:
+            cart.pop(str(product_id))
+
     if 'logged_user' in request.session:
         user.user_cart=cart
         user.save()
     else:
         request.session['cart']=cart
-    
     return redirect('show_cart')
 
 def see_order(request,user_username):
@@ -403,22 +425,6 @@ def see_order(request,user_username):
     else:
         user_orders = users.user_orders.all()
     return render(request,'items/display_orders.html',{'user_orders':user_orders})
-
-def inc_value_cart(request,product_slug):
-    product_id = Product.objects.filter(product_slug=product_slug).values_list(flat=True).first()
-    if 'logged_user' in request.session:
-        user = User.objects.filter(user_username=request.session['logged_user']).first()
-        cart = user.user_cart
-    else:
-        cart = request.session['cart']
-    cart[str(product_id)] += 1
-    
-    if 'logged_user' in request.session:
-        user.user_cart=cart
-        user.save()
-    else:    
-        request.session['cart']=cart
-    return redirect('show_cart')
 
 def add_address(request):
     if request.method == "POST":

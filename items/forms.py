@@ -56,7 +56,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model=User
         fields=['user_username','user_name','user_email','user_mobile','user_password','user_age' ,'user_role','user_image','user_gender']
-    
+
     user_username = forms.CharField(
     max_length=18,
     label="Username",

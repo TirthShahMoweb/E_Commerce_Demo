@@ -4,17 +4,22 @@
 {% block title %}{{ product.product_name }} - Details{% endblock %}
 
 {% block css_files %}
-<link rel="stylesheet" href="{% static "items/product_details.css" %}">
+<link rel="stylesheet" href="{% static 'items/product_details.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
     <!-- Product Detail Card -->
-    <div class="card shadow-lg">
-        <div class="card-body">
+    <div class="card shadow-lg position-relative"> <!-- Add position-relative to the card -->
+        <div class="card-body ">
+            <!-- Heart Icon in Top Right Corner of Card -->
+            <a href="{%url 'add_remove_wishlist' product.product_slug False %}">
+                <span class="heart-icon" style="font-size: 40px; color: {% if exist %}red{% else %}gray{% endif %};">
+                    &#9829;
+                </span>
+            </a>
             <a href="{% url 'show_product' %}" class="btn btn-secondary btn-lg" style="background-color: grey; border-color: grey; color: white; text-decoration: none;">Back to Products</a>
             <h1 class="card-title text-center text-primary">{{ product.product_name }}</h1>
-
             <!-- Product Details -->
             <div class="row">
                 <div class="col-md-6">
@@ -28,34 +33,29 @@
                     <p class="text-justify">{{ product.product_info }}</p>
                 </div>
             </div>
+
             <br>
-             <div class="quantity-control">
-                <a href="{% url 'decrease' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == 1 or product.product_quantity == 0 %} disabled {% endif %}>-</button></a>
-                <span class="quantity-display" id="quantity-display" style="font-size:1.5rem; font-weight: bold;text-align: center;width: 50px;display: inline-block;background-color:white;padding: 6px;border: 1px solid #ddd;border-radius: 4px;">{{quantity}}</span>
-                <a href="{% url 'increase' product.product_slug %}" style="text-decoration: none;"><button class="quantity-btn" {% if quantity == product.product_quantity or product.product_quantity == 0 %} disabled {% endif %}>+</button></a>
-                <a href="{% url 'add-to-cart' product.product_slug %}" 
-                        class="btn btn-warning btn-lg" 
-                        style="background-color:#FFC300; border-color: red; color: white; text-decoration: none;" 
-                        {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>
-                        Cart
-</a>
+            <div class="quantity-control">
+                <a href="{% url 'change_value' product.product_slug False %}" style="text-decoration: none;">
+                    <button class="quantity-btn" {% if quantity == 1 or product.product_quantity == 0 %} disabled {% endif %}>-</button>
+                </a>
+                <span class="quantity-display" id="quantity-display" style="font-size: 1.5rem; font-weight: bold;text-align: center;width: 50px;display: inline-block;background-color:white;padding: 6px;border: 1px solid #ddd;border-radius: 4px;">{{quantity}}</span>
+                <a href="{% url 'change_value' product.product_slug True %}" style="text-decoration: none;">
+                    <button class="quantity-btn" {% if quantity == product.product_quantity or product.product_quantity == 0 %} disabled {% endif %}>+</button>
+                </a>
+                <a href="{% url 'add-to-cart' product.product_slug %}" class="btn btn-warning btn-lg" style="background-color:#FFC300; border-color: red; color: white; text-decoration: none;" {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>Cart</a>
 
-<a href="{% url 'product_order' product.product_slug %}" 
-   class="btn btn-success btn-lg order-btn" 
-   style="text-decoration: none;" 
-   {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>
-   Buy Now
-</a>
-
+                <a href="{% url 'product_order' product.product_slug %}" class="btn btn-success btn-lg order-btn" style="text-decoration: none;" {% if product.product_quantity == 0 %} onclick="return false;" style="opacity: 0.6; cursor: not-allowed;" {% endif %}>Buy Now</a>
             </div>
             <br>
+
             <!-- Action Buttons -->
             <div class="d-flex justify-content-center gap-5 mt-4 align-items-center">
                 {%if user_role == "Administrator" %}
                 <a href="{% url 'product_update' product.product_slug %}" class="btn btn-primary btn-lg" style="background-color: blue; border-color: blue; color: white; text-decoration: none;">Update</a>
                 <a href="{% url 'product_delete' product.product_slug %}" class="btn btn-danger btn-lg" style="background-color: red; border-color: red; color: white; text-decoration: none;">Delete</a>
                 {% endif %}
-                </div>
+            </div>
         </div>
     </div>
 </div>
