@@ -211,6 +211,7 @@ def valid_otp(request):
         if entered_otp==session_otp:
             user = request.session['check_user']
             request.session['logged_user'] = user
+            user = User.objects.filter(user_username = user).first()
             del request.session['check_user']
             if 'cart' in request.session:
                 cart=request.session['cart']
@@ -344,7 +345,7 @@ def add_remove_wishlist(request,product_slug: str, flag):
         user.save()
     else:
         return redirect('user_login')
-    
+
     if flag == 'True':
         return redirect('display_wishlist', user_username = request.session['logged_user'])
     else:

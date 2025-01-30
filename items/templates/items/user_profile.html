@@ -12,11 +12,11 @@
     <div class="profile-card">
     <a href="{%url 'show_product'%}" class="home-icon-link">
         <span class="home-icon">&#127968;</span>
-    </a> 
+    </a>
 
         <h1 class="profile-heading">User Profile</h1>
-        
-        {% for i in logged_user %}
+
+        {% for i in user_info %}
         <div class="profile-info">
             <!-- Profile Image -->
             <div class="profile-image">
@@ -30,7 +30,7 @@
             <p><strong>Mobile Number: </strong>+91 {{ i.user_mobile }}</p>
             <p><strong>Email ID: </strong>{{ i.user_email }}</p>
             <p><strong>Age: </strong>{{ i.user_age }}</p>
-            
+
             {% if i.user_role == "Administrator" %}
                 <p><strong>Role: </strong>{{ i.user_role }}</p>
             {% endif %}

@@ -1,0 +1,11 @@
+[
+    {
+        "model": "auth.user",
+        "fields": {
+            "username": "tirth",
+            "password": "pbkdf2_sha256$870000$Dh5YCLUBAPA6T51f9yr24u$WLP3A3IBlnM9YFBlJPRX4MdKDkC9Nf5ssId625sUt+0=",
+            "is_superuser": true,
+            "is_staff": true
+        }
+    }
+]
